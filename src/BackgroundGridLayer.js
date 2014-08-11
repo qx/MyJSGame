@@ -3,12 +3,12 @@
  */
 var OFFSET_X = 0,
     OFFSET_Y = 0,
-    ROW = COL = 1,
+    ROW = COL = 8,
     BLOCK_W = 60,
     BLOCK_H = 60,
-    BLOCK_XREGION = 33,
-    BLOCK_YREGION = 28,
-    OFFSET_ODD = 16,
+    BLOCK_XREGION = 60,
+    BLOCK_YREGION = 60,
+    OFFSET_ODD = 0,
     BLOCK1_RECT = cc.rect(0, 0, BLOCK_W, BLOCK_H),
     BLOCK2_RECT = cc.rect(BLOCK_W, 0, BLOCK_W, BLOCK_H),
     PLAYER_W = 66,
@@ -36,21 +36,21 @@ var OFFSET_X = 0,
 //    }
 //});
 var BackgroundGridLayer = cc.Layer.extend({
-    blocks : null,
-    batch : null,
-    block_tex : null,
-    player : null,
-    player_r : 4,
-    player_c : 4,
-    moving_action : null,
-    trapped_action : null,
-    active_blocks : null,
-    trapped : false,
-    inited : false,
-    active_nodes : null,
+    blocks: null,
+    batch: null,
+    block_tex: null,
+    player: null,
+    player_r: 4,
+    player_c: 4,
+    moving_action: null,
+    trapped_action: null,
+    active_blocks: null,
+    trapped: false,
+    inited: false,
+    active_nodes: null,
     step: 0,
 
-    ctor : function () {
+    ctor: function () {
         this._super();
 
         this.anchorX = 0;
@@ -69,7 +69,7 @@ var BackgroundGridLayer = cc.Layer.extend({
         this.blocks.y = OFFSET_Y;
         this.addChild(this.blocks);
 
-        this.batch = new cc.SpriteBatchNode(res.hit_init, 1);
+        this.batch = new cc.SpriteBatchNode(res.hit_init, 81);
         this.block_tex = this.batch.texture;
         var ox = x = y = 0, odd = false, block, tex = this.batch.texture;
         for (var r = 0; r < ROW; r++) {
@@ -79,13 +79,15 @@ var BackgroundGridLayer = cc.Layer.extend({
                 x = ox + BLOCK_XREGION * c;
                 block = new cc.Sprite(tex, cc.rect(0, 0, BLOCK_W, BLOCK_H));
                 block.attr({
-                    anchorX : 0,
-                    anchorY : 0,
-                    x : x,
-                    y : y,
-                    width : BLOCK_W,
-                    height : BLOCK_H
+                    anchorX: 0,
+                    anchorY: 0,
+                    x: x,
+                    y: y,
+                    width: BLOCK_W,
+                    height: BLOCK_H
                 });
+                cc.log("x:" + x);
+                cc.log("y:" + y);
                 this.batch.addChild(block);
             }
 //            odd = !odd;
@@ -95,54 +97,54 @@ var BackgroundGridLayer = cc.Layer.extend({
 //        this.blocks.end();
         this.blocks.addChild(this.batch);
         this.blocks.bake();
-
-        tex = cc.textureCache.addImage(res.player);
-        var frame,
-            rect = cc.rect(0, 0, PLAYER_W, PLAYER_H),
-            moving_frames = [], trapped_frames = [];
-        for (var i = 0; i < 6; i++) {
-            rect.x = PLAYER_OX + i * PLAYER_W;
-            frame = new cc.SpriteFrame(tex, rect);
-            trapped_frames.push(frame);
-        }
-        rect.y = MOVING_OY;
-        for (var i = 0; i < 4; i++) {
-            rect.x = PLAYER_OX + i * PLAYER_W;
-            frame = new cc.SpriteFrame(tex, rect);
-            moving_frames.push(frame);
-        }
-
-        var moving_animation = new cc.Animation(moving_frames, 0.2);
-        this.moving_action = cc.animate(moving_animation).repeatForever();
-        var trapped_animation = new cc.Animation(trapped_frames, 0.2);
-        this.trapped_action = cc.animate(trapped_animation).repeatForever();
-
-        this.player = new cc.Sprite(moving_frames[0]);
+//
+//        tex = cc.textureCache.addImage(res.player);
+//        var frame,
+//            rect = cc.rect(0, 0, PLAYER_W, PLAYER_H),
+//            moving_frames = [], trapped_frames = [];
+//        for (var i = 0; i < 6; i++) {
+//            rect.x = PLAYER_OX + i * PLAYER_W;
+//            frame = new cc.SpriteFrame(tex, rect);
+//            trapped_frames.push(frame);
+//        }
+//        rect.y = MOVING_OY;
+//        for (var i = 0; i < 4; i++) {
+//            rect.x = PLAYER_OX + i * PLAYER_W;
+//            frame = new cc.SpriteFrame(tex, rect);
+//            moving_frames.push(frame);
+//        }
+//
+//        var moving_animation = new cc.Animation(moving_frames, 0.2);
+//        this.moving_action = cc.animate(moving_animation).repeatForever();
+//        var trapped_animation = new cc.Animation(trapped_frames, 0.2);
+//        this.trapped_action = cc.animate(trapped_animation).repeatForever();
+//
+//        this.player = new cc.Sprite(moving_frames[0]);
 //        this.addChild(this.player, 10);
 
-        cc.eventManager.addListener({
-            event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-            onTouchesBegan: function (touches, event) {
-                var touch = touches[0];
-                var pos = touch.getLocation();
-                var target = event.getCurrentTarget();
-                if (!target.inited) return;
-
-                pos.y -= OFFSET_Y;
-                var r = Math.floor(pos.y / BLOCK_YREGION);
-                pos.x -= OFFSET_X + (r%2==1) * OFFSET_ODD;
-                var c = Math.floor(pos.x / BLOCK_XREGION);
-                if (c >= 0 && r >= 0 && c < COL && r < ROW) {
-                    if (target.activateBlock(r, c)) {
-                        target.step ++;
-                        target.movePlayer();
-                    }
-                }
-            }
-        }, this);
+//        cc.eventManager.addListener({
+//            event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+//            onTouchesBegan: function (touches, event) {
+//                var touch = touches[0];
+//                var pos = touch.getLocation();
+//                var target = event.getCurrentTarget();
+//                if (!target.inited) return;
+//
+//                pos.y -= OFFSET_Y;
+//                var r = Math.floor(pos.y / BLOCK_YREGION);
+//                pos.x -= OFFSET_X + (r%2==1) * OFFSET_ODD;
+//                var c = Math.floor(pos.x / BLOCK_XREGION);
+//                if (c >= 0 && r >= 0 && c < COL && r < ROW) {
+//                    if (target.activateBlock(r, c)) {
+//                        target.step ++;
+//                        target.movePlayer();
+//                    }
+//                }
+//            }
+//        }, this);
     },
 
-    initGame : function() {
+    initGame: function () {
         if (this.inited) return;
 
         this.player_c = this.player_r = 4;
@@ -161,10 +163,10 @@ var BackgroundGridLayer = cc.Layer.extend({
         this.randomBlocks();
 
         this.player.attr({
-            anchorX : 0.5,
-            anchorY : 0,
-            x : OFFSET_X + BLOCK_XREGION * this.player_c + BLOCK_W/2,
-            y : OFFSET_Y + BLOCK_YREGION * this.player_r - 5
+            anchorX: 0.5,
+            anchorY: 0,
+            x: OFFSET_X + BLOCK_XREGION * this.player_c + BLOCK_W / 2,
+            y: OFFSET_Y + BLOCK_YREGION * this.player_r - 5
         });
         this.player.stopAllActions();
         this.player.runAction(this.moving_action);
@@ -172,7 +174,7 @@ var BackgroundGridLayer = cc.Layer.extend({
         this.inited = true;
     },
 
-    randomBlocks : function() {
+    randomBlocks: function () {
         var nb = Math.round(cc.random0To1() * 13) + 7, r, c;
         for (var i = 0; i < nb; i++) {
             r = Math.floor(cc.random0To1() * 9);
@@ -181,16 +183,16 @@ var BackgroundGridLayer = cc.Layer.extend({
         }
     },
 
-    activateBlock : function(r, c) {
+    activateBlock: function (r, c) {
         if (!this.active_blocks[r][c]) {
             var block = new cc.Sprite(this.block_tex, BLOCK1_RECT);
             block.attr({
-                anchorX : 0,
-                anchorY : 0,
-                x : OFFSET_X + (r%2==1) * OFFSET_ODD + BLOCK_XREGION * c,
-                y : OFFSET_Y + BLOCK_YREGION * r,
-                width : BLOCK_W,
-                height : BLOCK_H
+                anchorX: 0,
+                anchorY: 0,
+                x: OFFSET_X + (r % 2 == 1) * OFFSET_ODD + BLOCK_XREGION * c,
+                y: OFFSET_Y + BLOCK_YREGION * r,
+                width: BLOCK_W,
+                height: BLOCK_H
             });
             this.active_nodes.push(block);
             this.addChild(block, 2);
@@ -200,7 +202,7 @@ var BackgroundGridLayer = cc.Layer.extend({
         return false;
     },
 
-    movePlayer : function() {
+    movePlayer: function () {
         var r = this.player_r, c = this.player_c, result = -1, temp;
         temp = getDistance(r, c, l_choices, this.active_blocks, hori_passed, 0);
         //console.log(temp[2]);
@@ -228,10 +230,10 @@ var BackgroundGridLayer = cc.Layer.extend({
                 this.player.runAction(this.trapped_action);
             }
 
-            if (!this.active_blocks[r][c-1])
-                this.player_c = c-1;
-            else if (!this.active_blocks[r][c+1])
-                this.player_c = c+1;
+            if (!this.active_blocks[r][c - 1])
+                this.player_c = c - 1;
+            else if (!this.active_blocks[r][c + 1])
+                this.player_c = c + 1;
             else {
                 var odd = (r % 2 == 1);
                 var dr = r - 1, tr = r + 1, nc = c + (odd ? 0 : -1);
@@ -240,17 +242,17 @@ var BackgroundGridLayer = cc.Layer.extend({
                     this.player_r = dr;
                     this.player_c = nc;
                 }
-                else if (!this.active_blocks[dr][nc+1]) {
+                else if (!this.active_blocks[dr][nc + 1]) {
                     this.player_r = dr;
-                    this.player_c = nc+1;
+                    this.player_c = nc + 1;
                 }
                 else if (!this.active_blocks[tr][nc]) {
                     this.player_r = tr;
                     this.player_c = nc;
                 }
-                else if (!this.active_blocks[tr][nc+1]) {
+                else if (!this.active_blocks[tr][nc + 1]) {
                     this.player_r = tr;
-                    this.player_c = nc+1;
+                    this.player_c = nc + 1;
                 }
                 // WIN
                 else {
@@ -269,10 +271,10 @@ var BackgroundGridLayer = cc.Layer.extend({
             this.player_c = result[1];
         }
         this.player.attr({
-            anchorX : 0.5,
-            anchorY : 0,
-            x : OFFSET_X + (this.player_r%2==1) * OFFSET_ODD + BLOCK_XREGION * this.player_c + BLOCK_W/2,
-            y : OFFSET_Y + BLOCK_YREGION * this.player_r - 5
+            anchorX: 0.5,
+            anchorY: 0,
+            x: OFFSET_X + (this.player_r % 2 == 1) * OFFSET_ODD + BLOCK_XREGION * this.player_c + BLOCK_W / 2,
+            y: OFFSET_Y + BLOCK_YREGION * this.player_r - 5
         });
         //console.log(result);
     }

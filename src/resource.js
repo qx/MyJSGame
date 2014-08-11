@@ -4,7 +4,9 @@ var res = {
     start_s_png : "res/start_s.png",
     PlayBG_png  : "res/PlayBG.png",
     runner_png  : "res/running.png",
-    runner_plist : "res/running.plist"
+    runner_plist : "res/running.plist",
+    player : "res/player.png",
+    block : "res/block.png"
 };
 
 var g_resources = [
@@ -14,5 +16,7 @@ var g_resources = [
     res.start_s_png,
     res.PlayBG_png,
     res.runner_png,
-    res.runner_plist
+    res.runner_plist,
+    res.block,
+    res.player
 ];

@@ -10,5 +10,7 @@ var PlayScene = cc.Scene.extend({
 //        this.addChild(new BackgroundLayer());
 //        this.addChild(new AnimationLayer());
 //        this.addChild(new StatusLayer());
+
+
     }
 });

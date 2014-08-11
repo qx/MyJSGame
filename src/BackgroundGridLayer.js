@@ -86,8 +86,6 @@ var BackgroundGridLayer = cc.Layer.extend({
                     width: BLOCK_W,
                     height: BLOCK_H
                 });
-                cc.log("x:" + x);
-                cc.log("y:" + y);
                 this.batch.addChild(block);
             }
 //            odd = !odd;
@@ -122,32 +120,37 @@ var BackgroundGridLayer = cc.Layer.extend({
 //        this.player = new cc.Sprite(moving_frames[0]);
 //        this.addChild(this.player, 10);
 
-//        cc.eventManager.addListener({
-//            event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-//            onTouchesBegan: function (touches, event) {
-//                var touch = touches[0];
-//                var pos = touch.getLocation();
-//                var target = event.getCurrentTarget();
-//                if (!target.inited) return;
-//
-//                pos.y -= OFFSET_Y;
-//                var r = Math.floor(pos.y / BLOCK_YREGION);
-//                pos.x -= OFFSET_X + (r%2==1) * OFFSET_ODD;
-//                var c = Math.floor(pos.x / BLOCK_XREGION);
-//                if (c >= 0 && r >= 0 && c < COL && r < ROW) {
-//                    if (target.activateBlock(r, c)) {
-//                        target.step ++;
-//                        target.movePlayer();
-//                    }
-//                }
-//            }
-//        }, this);
+        cc.eventManager.addListener({
+            event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+            onTouchesBegan: function (touches, event) {
+                var touch = touches[0];
+                var pos = touch.getLocation();
+                cc.log("clicked:" + pos.x + "(:)" + pos.y);
+                var target = event.getCurrentTarget();
+                cc.log("clicked result:" + !target.inited);
+                if (!target.inited) return;
+
+                pos.y -= OFFSET_Y;
+                var r = Math.floor(pos.y / BLOCK_YREGION);
+                pos.x -= OFFSET_X + (r % 2 == 1) * OFFSET_ODD;
+                var c = Math.floor(pos.x / BLOCK_XREGION);
+                if (c >= 0 && r >= 0 && c < COL && r < ROW) {
+                    if (target.activateBlock(r, c)) {
+                        target.step++;
+                        target.movePlayer();
+                    }
+                }
+            }
+        }, this);
+        this.initGame();
     },
 
     initGame: function () {
+
+
         if (this.inited) return;
 
-        this.player_c = this.player_r = 4;
+//        this.player_c = this.player_r = 4;
         this.step = 0;
 
         for (var i = 0, l = this.active_nodes.length; i < l; i++) {
@@ -162,30 +165,32 @@ var BackgroundGridLayer = cc.Layer.extend({
 
         this.randomBlocks();
 
-        this.player.attr({
-            anchorX: 0.5,
-            anchorY: 0,
-            x: OFFSET_X + BLOCK_XREGION * this.player_c + BLOCK_W / 2,
-            y: OFFSET_Y + BLOCK_YREGION * this.player_r - 5
-        });
-        this.player.stopAllActions();
-        this.player.runAction(this.moving_action);
+//        this.player.attr({
+//            anchorX: 0.5,
+//            anchorY: 0,
+//            x: OFFSET_X + BLOCK_XREGION * this.player_c + BLOCK_W / 2,
+//            y: OFFSET_Y + BLOCK_YREGION * this.player_r - 5
+//        });
+//        this.player.stopAllActions();
+//        this.player.runAction(this.moving_action);
 
         this.inited = true;
     },
 
     randomBlocks: function () {
-        var nb = Math.round(cc.random0To1() * 13) + 7, r, c;
+        var nb = Math.round(cc.random0To1() * 13) + 7, r, nbc;
+        cc.log("nb  ==" + nb);
         for (var i = 0; i < nb; i++) {
-            r = Math.floor(cc.random0To1() * 9);
-            c = Math.floor(cc.random0To1() * 9);
+            r = Math.floor(cc.random0To1() * 8);
+            c = Math.floor(cc.random0To1() * 8);
             this.activateBlock(r, c);
         }
     },
 
     activateBlock: function (r, c) {
         if (!this.active_blocks[r][c]) {
-            var block = new cc.Sprite(this.block_tex, BLOCK1_RECT);
+//            var block = new cc.Sprite(this.block_tex, BLOCK1_RECT);
+            var block = new cc.Sprite(res.hit_, BLOCK1_RECT);
             block.attr({
                 anchorX: 0,
                 anchorY: 0,
@@ -194,6 +199,7 @@ var BackgroundGridLayer = cc.Layer.extend({
                 width: BLOCK_W,
                 height: BLOCK_H
             });
+            cc.log("block==" + block);
             this.active_nodes.push(block);
             this.addChild(block, 2);
             this.active_blocks[r][c] = true;

@@ -9,7 +9,10 @@ var res = {
     block : "res/block.png",
     hit : "res/hit_combine.png",
     hit_plist : "res/hit.plist",
-    hit_init : "res/hit_init.png"
+    hit_init : "res/hit_init.png",
+    hit_no : "res/hit_no.png",
+    hit_fin : "res/hit_fin.png",
+    hit_ : "res/hit.png"
 };
 
 var g_resources = [
@@ -24,5 +27,8 @@ var g_resources = [
     res.player,
     res.hit,
     res.hit_plist,
-    res.hit_init
+    res.hit_init,
+    res.hit_no,
+    res.hit_fin,
+    res.hit_
 ];

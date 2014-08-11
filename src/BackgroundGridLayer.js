@@ -137,7 +137,9 @@ var BackgroundGridLayer = cc.Layer.extend({
                 if (c >= 0 && r >= 0 && c < COL && r < ROW) {
                     if (target.activateBlock(r, c)) {
                         target.step++;
-                        target.movePlayer();
+                        cc.log("clicked move:" + target.step);
+
+//                        target.movePlayer();
                     }
                 }
             }

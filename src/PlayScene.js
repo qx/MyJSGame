@@ -7,7 +7,6 @@ var PlayScene = cc.Scene.extend({
         this.addChild(new BackgroundGridLayer());
         this.addChild(new GridLayer());
 
-
 //        this.addChild(new BackgroundLayer());
 //        this.addChild(new AnimationLayer());
 //        this.addChild(new StatusLayer());

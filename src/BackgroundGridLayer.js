@@ -2,7 +2,7 @@
  * Created by ok on 14-8-11.
  */
 var OFFSET_X = 0,
-    OFFSET_Y = 0,
+    OFFSET_Y = 160,
     ROW = COL = 8,
     BLOCK_W = 60,
     BLOCK_H = 60,
@@ -69,7 +69,7 @@ var BackgroundGridLayer = cc.Layer.extend({
         this.blocks.y = OFFSET_Y;
         this.addChild(this.blocks);
 
-        this.batch = new cc.SpriteBatchNode(res.hit_init, 81);
+        this.batch = new cc.SpriteBatchNode(res.hit_init, 64);
         this.block_tex = this.batch.texture;
         var ox = x = y = 0, odd = false, block, tex = this.batch.texture;
         for (var r = 0; r < ROW; r++) {

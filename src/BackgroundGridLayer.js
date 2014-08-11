@@ -1,11 +1,11 @@
 /**
  * Created by ok on 14-8-11.
  */
-var OFFSET_X = 4,
-    OFFSET_Y = 32,
-    ROW = COL = 9,
-    BLOCK_W = 32,
-    BLOCK_H = 36,
+var OFFSET_X = 0,
+    OFFSET_Y = 0,
+    ROW = COL = 1,
+    BLOCK_W = 60,
+    BLOCK_H = 60,
     BLOCK_XREGION = 33,
     BLOCK_YREGION = 28,
     OFFSET_ODD = 16,
@@ -69,7 +69,7 @@ var BackgroundGridLayer = cc.Layer.extend({
         this.blocks.y = OFFSET_Y;
         this.addChild(this.blocks);
 
-        this.batch = new cc.SpriteBatchNode(res.block, 81);
+        this.batch = new cc.SpriteBatchNode(res.hit_init, 1);
         this.block_tex = this.batch.texture;
         var ox = x = y = 0, odd = false, block, tex = this.batch.texture;
         for (var r = 0; r < ROW; r++) {
@@ -77,7 +77,7 @@ var BackgroundGridLayer = cc.Layer.extend({
             ox = odd * OFFSET_ODD;
             for (var c = 0; c < COL; c++) {
                 x = ox + BLOCK_XREGION * c;
-                block = new cc.Sprite(tex, BLOCK2_RECT);
+                block = new cc.Sprite(tex, cc.rect(0, 0, BLOCK_W, BLOCK_H));
                 block.attr({
                     anchorX : 0,
                     anchorY : 0,
@@ -118,7 +118,7 @@ var BackgroundGridLayer = cc.Layer.extend({
         this.trapped_action = cc.animate(trapped_animation).repeatForever();
 
         this.player = new cc.Sprite(moving_frames[0]);
-        this.addChild(this.player, 10);
+//        this.addChild(this.player, 10);
 
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ALL_AT_ONCE,

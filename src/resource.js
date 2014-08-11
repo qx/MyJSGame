@@ -6,7 +6,9 @@ var res = {
     runner_png  : "res/running.png",
     runner_plist : "res/running.plist",
     player : "res/player.png",
-    block : "res/block.png"
+    block : "res/block.png",
+    hit : "res/hit_combine.png",
+    hit_plist : "res/hit.plist"
 };
 
 var g_resources = [
@@ -18,5 +20,7 @@ var g_resources = [
     res.runner_png,
     res.runner_plist,
     res.block,
-    res.player
+    res.player,
+    res.hit,
+    res.hit_plist
 ];
